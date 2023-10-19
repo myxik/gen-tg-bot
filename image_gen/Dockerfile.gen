@@ -1,0 +1,18 @@
+FROM nvcr.io/nvidia/pytorch:23.09-py3
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN apt update && apt install -y gcc
+
+WORKDIR /workspace
+
+COPY ./.env /workspace
+
+COPY ./image_gen /workspace
+
+RUN pip install accelerate transformers diffusers fastapi
+
+RUN chmod +x /workspace/start_server.sh
+
+CMD ["/workspace/start_server.sh"]

@@ -1,0 +1,6 @@
+aiogram
+psycopg2-binary
+python-dotenv
+rq
+Pillow
+requests

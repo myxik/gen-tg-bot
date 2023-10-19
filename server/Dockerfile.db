@@ -1,0 +1,29 @@
+# Use an official PostgreSQL runtime as a parent image
+FROM postgres:13
+
+# Set the working directory in the container
+WORKDIR /docker-entrypoint-initdb.d/
+
+# Install dependencies for building pgvector
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        postgresql-server-dev-13 \
+        git \
+        ca-certificates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Run the rest of the commands as the ``postgres`` user 
+# created by the ``postgres-13`` image when it was built
+USER postgres
+
+# Set the database name environment variable
+ENV POSTGRES_DB=genbot
+ENV POSTGRES_PASSWORD=123
+
+# Add initialization scripts (optional)
+COPY ./server/setup_db.sql /docker-entrypoint-initdb.d/
+
+# At container startup, PostgreSQL will execute all *.sql, *.sql.gz, or *.sh 
+# scripts in /docker-entrypoint-initdb.d in lexicographical order.

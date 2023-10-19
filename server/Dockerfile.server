@@ -1,0 +1,24 @@
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim-buster
+
+# Set environment varibles
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set work directory in the container
+WORKDIR /app
+
+RUN apt update && apt install -y gcc
+
+# Install dependencies
+COPY ./server/requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the current directory contents into the container at /app
+COPY ./.env /app/
+COPY ./server /app/
+
+RUN chmod +x /app/start_services.sh
+
+CMD ["/app/start_services.sh"]
+
