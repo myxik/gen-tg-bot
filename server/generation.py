@@ -20,7 +20,7 @@ tg_url = f"https://api.telegram.org/bot{API_TOKEN}/"
 
 
 def call_generation(prompt, chat_id, working_uuid):
-    conn = psycopg2.connect("postgresql://postgres:123@localhost/meina")
+    conn = psycopg2.connect("postgresql://postgres:123@localhost/genbot")
     cursor = conn.cursor()
 
     response = requests.post(url, params={"prompt": prompt.strip()}, headers=headers)
